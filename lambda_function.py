@@ -5,7 +5,8 @@ def respond(res):
         'statusCode': 200,
         'body': json.dumps(res),
         'headers': {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'*'
         }
     }
 
