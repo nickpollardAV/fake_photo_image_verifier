@@ -1,5 +1,5 @@
 import json
-from src.controller import controller
+from controller import controller
 
 
 
