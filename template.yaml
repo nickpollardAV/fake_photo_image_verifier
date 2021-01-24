@@ -1,14 +1,17 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  fake-photo-sam-app
-
-  Sample SAM Template for fake-photo-sam-app
+  fake-photo-image-verifier stack
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
+
+Parameters:
+  BucketNamePrefix:
+    Type: String
+    Default: fake-photo-bucket
 
 Resources:
   FakePhotoFunction:
@@ -17,23 +20,30 @@ Resources:
       CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.7
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Sub "${BucketNamePrefix}"
       Events:
-        FakePhoto:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        BucketEvent1:
+          Type: S3
           Properties:
-            Path: /test
-            Method: get
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:*'
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub "${BucketNamePrefix}"
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  FakePhotoApi:
-    Description: "API Gateway endpoint URL for Prod stage for FakePhoto function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+
   FakePhotoFunction:
     Description: "FakePhoto Lambda Function ARN"
     Value: !GetAtt FakePhotoFunction.Arn
   FakePhotoFunctionIamRole:
     Description: "Implicit IAM Role created for FakePhoto function"
     Value: !GetAtt FakePhotoFunctionRole.Arn
+

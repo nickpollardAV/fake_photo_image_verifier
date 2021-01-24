@@ -16,5 +16,6 @@ def respond(res):
     }
 
 def lambda_handler(event, context):
-    controller(event)
-    return respond(event)
+    print("TESTLOG")
+    # controller(event)
+    # return respond(event)
