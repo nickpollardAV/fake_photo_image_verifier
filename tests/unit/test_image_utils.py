@@ -7,10 +7,10 @@ import numpy as np
 
 from src.utils.image_utils import ImageUtils
 
-class UtilsTest(TestCase):
+class ImageUtilsTest(TestCase):
 
     def setUp(self):
-        self.ImageUtils = ImageUtils()
+        self.image_utils = ImageUtils()
 
     def create_test_image(self):
         # https://wildfish.com/blog/2014/02/27/generating-in-memory-image-for-tests-python/
@@ -23,27 +23,17 @@ class UtilsTest(TestCase):
 
     def test_convert_image_to_numbers_array_opens_image_from_download_path(self):
         with patch.object(Image, 'open') as mock:
-            self.ImageUtils.convert_image_to_numbers_array("test_path")
+            self.image_utils.convert_image_to_numbers_array("test_path")
         
         mock.assert_called_with("test_path")
 
     def test_convert_image_to_numbers_array_converts_image_to_rbg_array(self):
         test_file_location = self.create_test_image()
 
-        result = self.ImageUtils.convert_image_to_numbers_array(test_file_location)
+        result = self.image_utils.convert_image_to_numbers_array(test_file_location)
      
         np.testing.assert_array_equal(result, np.array([155, 0, 0, 155, 0, 0, 155, 0, 0, 155, 0, 0]))
 
-    def test_dataset_real_percentage_calls_function_to_convert_list_to_correct_format(self):
-        with patch.object(ImageUtils, 'convert_list_to_format_for_analysis') as mock:
-            self.ImageUtils.dataset_real_percentage([2,3,4])
-
-        mock.assert_called_with([2,3,4])
-
-    def test_convert_list_to_format_for_analysis_returns_list_in_where_only_first_digit_of_list_item_is_present(self):
-        result = self.ImageUtils.convert_list_to_format_for_analysis([203,305,406])
-
-        self.assertEqual(result, [2,3,4])
 
 if __name__ == '__main__':
     unittest.main()
