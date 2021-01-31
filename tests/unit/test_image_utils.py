@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from PIL import Image
 from io import BytesIO
+import numpy as np
 
 from src.utils.image_utils import ImageUtils
 
@@ -20,17 +21,18 @@ class UtilsTest(TestCase):
         file.seek(0)
         return file
 
-    def test_convert_image_to_numbers_list_opens_image_from_download_path(self):
+    def test_convert_image_to_numbers_array_opens_image_from_download_path(self):
         with patch.object(Image, 'open') as mock:
-            self.ImageUtils.convert_image_to_numbers_list("test_path")
+            self.ImageUtils.convert_image_to_numbers_array("test_path")
         
         mock.assert_called_with("test_path")
 
-    def test_convert_image_to_numbers_list_converts_image_to_rbg_array(self):
+    def test_convert_image_to_numbers_array_converts_image_to_rbg_array(self):
         test_file_location = self.create_test_image()
-        result = self.ImageUtils.convert_image_to_numbers_list(test_file_location)
-
-        self.assertEqual(result, 155, 0, 0, 155, 0, 0, 155, 0, 0, 155, 0, 0)
+        
+        result = self.ImageUtils.convert_image_to_numbers_array(test_file_location)
+     
+        np.testing.assert_array_equal(result, np.array([155, 0, 0, 155, 0, 0, 155, 0, 0, 155, 0, 0]))
 
 if __name__ == '__main__':
     unittest.main()
