@@ -7,7 +7,7 @@ from urllib.parse import unquote_plus
 from PIL import Image
 # import PIL.Image
 # import pillow
-from utils.image_utils import ImageUtils
+from src.utils.image_utils import ImageUtils
 
 s3_client = boto3.client('s3')
 

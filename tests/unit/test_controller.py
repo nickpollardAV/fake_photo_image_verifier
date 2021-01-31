@@ -46,6 +46,7 @@ mock_event = {
 
 class ControllerTest(TestCase):
 
+    # test needs updating due to removing boto3 client from controller class
     @mock.patch("boto3.client")
     def test_controller_initialises_s3_client(self, mock_client):
         self.controller = Controller()
