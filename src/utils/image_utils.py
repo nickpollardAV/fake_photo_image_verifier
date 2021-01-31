@@ -10,4 +10,11 @@ class ImageUtils():
         except Exception as e:
             print(e)
 
+    def dataset_real_percentage(self, data_list):
+        self.convert_list_to_format_for_analysis(data_list)
+    
+    def convert_list_to_format_for_analysis(self, list_to_be_converted):
+        return [int(str(number)[0]) for number in list_to_be_converted]
+
+
         
